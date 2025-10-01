@@ -34,12 +34,12 @@ ENV/
 *~
 .DS_Store
 
-# Data and Models
-data/*.csv
-data/*.png
-data/*.jpg
-models/*.h5
-models/*.keras
+# Data and Models (commented out to include in repository)
+# data/*.csv
+# data/*.png
+# data/*.jpg
+# models/*.h5
+# models/*.keras
 
 # Keep directory structure
 !data/.gitkeep
