@@ -1,6 +1,14 @@
-# 株式投資AIシステム
+# AI Trading Agent System
 
 Yahoo!ファイナンスから株価データを取得し、LSTMベースの深層学習モデルで株価予測・天底検出を行い、バックテストで評価する総合的な株式投資AIシステムです。
+
+## 🤖 AIエージェント機能
+
+- **IntelligentTradingAgent**: メインAIエージェント
+- **MarketRegimeDetector**: 市場環境検出（強気・弱気・横ばい・高ボラティリティ）
+- **AdaptiveThresholdAgent**: 動的閾値調整
+- **MultiModelEnsembleAgent**: LSTM + Random Forest統合
+- **RiskManagementAgent**: 高度なリスク管理
 
 ## 🌟 主な機能
 
@@ -23,8 +31,9 @@ Yahoo!ファイナンスから株価データを取得し、LSTMベースの深�
 ## 🚀 インストール
 
 ```bash
-# リポジトリをクローン（または作成）
-cd /Volumes/FUKUI-SSD01/fx_trade
+# リポジトリをクローン
+git clone https://github.com/KaoruGitty/kaoru_private.git
+cd kaoru_private
 
 # 仮想環境を作成（推奨）
 python -m venv venv
@@ -35,6 +44,14 @@ pip install -r requirements.txt
 ```
 
 ## 📖 使い方
+
+### AIエージェントシステム
+
+```bash
+# AIエージェントの初期化とバックテスト
+python ai_trading_agent.py
+python ai_agent_backtest.py
+```
 
 ### 基本的な使い方（学習からバックテストまで全て実行）
 
@@ -67,117 +84,98 @@ python main.py --ticker 7203.T --mode backtest --initial_capital 1000000
 ## 📁 プロジェクト構造
 
 ```
-fx_trade/
-├── main.py                 # メインスクリプト
-├── requirements.txt        # 依存パッケージ
-├── README.md              # このファイル
-├── data/                  # データと可視化結果
+kaoru_private/
+├── ai_trading_agent.py        # AIエージェントシステム
+├── ai_agent_backtest.py       # AIエージェントバックテスト
+├── main.py                    # メインスクリプト
+├── requirements.txt           # 依存パッケージ
+├── README.md                 # このファイル
+├── data/                     # データと可視化結果
 │   ├── processed_data.csv
 │   ├── signals_visualization.png
-│   ├── *_history.png
-│   ├── *_confusion_matrix.png
-│   ├── regression_evaluation.png
-│   └── backtest_results.png
-├── models/                # 学習済みモデル
-│   ├── price_regression_best.h5
-│   ├── direction_classification_best.h5
-│   └── peak_bottom_detection_best.h5
-└── src/                   # ソースコード
+│   └── ai_agent_backtest_results.png
+├── models/                   # 学習済みモデル
+│   ├── *_focal_best.h5
+│   └── *_focal.h5
+└── src/                      # ソースコード
     ├── data_fetcher.py           # データ取得
     ├── feature_engineering.py    # 特徴量エンジニアリング
     ├── model.py                  # モデル定義
     ├── train.py                  # 学習
-    └── backtest.py              # バックテスト・評価
+    ├── backtest.py              # バックテスト・評価
+    ├── focal_loss.py            # Focal Loss実装
+    └── time_series_cv.py        # 時系列クロスバリデーション
 ```
 
 ## 🔧 各モジュールの説明
 
-### 1. data_fetcher.py
+### 1. ai_trading_agent.py
+高度なAIエージェントシステム：
+- 市場環境の自動検出
+- 適応的閾値調整
+- マルチモデルアンサンブル
+- 高度なリスク管理
+
+### 2. data_fetcher.py
 Yahoo!ファイナンスから株価データ（OHLCV）を取得します。
 
-```python
-from src.data_fetcher import DataFetcher
-
-fetcher = DataFetcher("7203.T", period="5y")
-data = fetcher.fetch_data()
-```
-
-### 2. feature_engineering.py
+### 3. feature_engineering.py
 テクニカル指標の計算、天底検出、買いシグナル生成を行います。
 
-主な機能：
-- 移動平均線（SMA）: 5, 10, 20, 50, 75, 200日
-- 移動平均乖離率
-- 指数移動平均（EMA）: 12, 26日
-- MACD（Moving Average Convergence Divergence）
-- RSI（Relative Strength Index）: 9, 14日
-- ストキャスティクス
-- ボリンジャーバンド（20日）
-- ATR（Average True Range）
-- OBV（On Balance Volume）
-- 価格変化率、ボラティリティ
-- 出来高分析
-
-### 3. model.py
+### 4. model.py
 LSTMベースの深層学習モデルを定義します。
 
-- **回帰モデル**: 将来の価格変化率を予測
-- **分類モデル**: 価格の上昇/横ばい/下降を予測
-- **天底検出モデル**: ピーク（天井）、ボトム（底）、通常を分類
-
-### 4. train.py
+### 5. train.py / train_focal_tscv.py
 モデルの学習を統合的に管理します。
 
-### 5. backtest.py
+### 6. backtest.py
 学習済みモデルの評価とバックテストを実行します。
 
 ## 📊 出力結果
 
-### 可視化ファイル（data/ディレクトリ）
+### AIエージェントバックテスト結果
+- ポートフォリオ価値の推移
+- 取引シグナルの可視化
+- パフォーマンス指標
+- ドローダウン分析
 
-1. **signals_visualization.png**: 株価チャートと買いシグナル、天底の可視化
-2. **price_regression_history.png**: 回帰モデルの学習履歴
-3. **direction_classification_history.png**: 分類モデルの学習履歴
-4. **peak_bottom_detection_history.png**: 天底検出モデルの学習履歴
-5. **regression_evaluation.png**: 回帰モデルの予測精度
-6. **direction_classification_confusion_matrix.png**: 方向予測の混同行列
-7. **peak_bottom_detection_confusion_matrix.png**: 天底検出の混同行列
-8. **backtest_results.png**: バックテスト結果（売買シグナルとポートフォリオ価値）
-
-### モデルファイル（models/ディレクトリ）
-
-- `price_regression_best.h5`: 価格予測モデル
-- `direction_classification_best.h5`: 方向予測モデル
-- `peak_bottom_detection_best.h5`: 天底検出モデル
+### 従来システムの結果
+- 学習履歴グラフ
+- 混同行列
+- 回帰評価
+- バックテスト結果
 
 ## 🎯 使用例
 
-### 例1: トヨタ自動車で学習とバックテスト
+### AIエージェントシステム
 
 ```bash
+# AIエージェントの実行
+python ai_trading_agent.py
+python ai_agent_backtest.py
+```
+
+### 従来システム
+
+```bash
+# トヨタ自動車で学習とバックテスト
 python main.py --ticker 7203.T --mode all --epochs 50
-```
 
-### 例2: ソフトバンクグループで詳細な学習
-
-```bash
-python main.py --ticker 9984.T --mode train --epochs 100 --lookback 90
-```
-
-### 例3: 既存モデルでバックテストのみ
-
-```bash
-python main.py --ticker 7203.T --mode backtest --initial_capital 5000000
+# Focal Loss + 時系列CVで学習
+python train_focal_tscv.py
 ```
 
 ## 📈 バックテスト戦略
 
-現在実装されているトレーディング戦略：
+### AIエージェント戦略
+- 市場環境に応じた動的調整
+- 信頼度ベースのポジションサイズ決定
+- 複数モデルのアンサンブル予測
+- 高度なリスク管理
 
-- **買いシグナル**: 価格が上昇すると予測され（direction=2）、かつ予測リターンが1%以上
-- **売りシグナル**: 価格が下降すると予測され（direction=0）、または予測リターンが-0.5%未満
-
-この戦略はカスタマイズ可能です（`src/backtest.py`の`run_backtest`メソッドを編集）。
+### 従来戦略
+- 固定閾値による買いシグナル
+- 価格方向予測ベースの取引
 
 ## ⚠️ 注意事項
 
@@ -188,12 +186,15 @@ python main.py --ticker 7203.T --mode backtest --initial_capital 5000000
 
 ## 🔄 今後の改善案
 
-- [ ] より高度なテクニカル指標の追加
-- [ ] アンサンブル学習の実装
+- [x] AIエージェントシステムの実装
+- [x] 市場環境検出機能
+- [x] 適応的閾値調整
+- [x] マルチモデルアンサンブル
+- [x] Focal Loss実装
+- [x] 時系列クロスバリデーション
+- [ ] 強化学習の導入
 - [ ] リアルタイムトレーディング機能
 - [ ] 複数銘柄の同時分析
-- [ ] ハイパーパラメータの自動最適化
-- [ ] Transformer モデルの実装
 - [ ] 感情分析（ニュース、SNS）の統合
 
 ## 📝 ライセンス
@@ -211,4 +212,3 @@ python main.py --ticker 7203.T --mode backtest --initial_capital 5000000
 ---
 
 **免責事項**: このソフトウェアは「現状のまま」提供され、明示的または黙示的な保証はありません。このソフトウェアの使用により生じたいかなる損害についても、作者は責任を負いません。
-
