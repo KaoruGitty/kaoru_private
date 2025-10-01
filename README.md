@@ -48,6 +48,9 @@ pip install -r requirements.txt
 ### AIエージェントシステム
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 # AIエージェントの初期化とバックテスト
 python ai_trading_agent.py
 python ai_agent_backtest.py
@@ -56,18 +59,27 @@ python ai_agent_backtest.py
 ### 基本的な使い方（学習からバックテストまで全て実行）
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 python main.py --ticker 7203.T --mode all --epochs 50
 ```
 
 ### 学習のみ実行
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 python main.py --ticker 7203.T --mode train --epochs 100 --batch_size 32
 ```
 
 ### バックテストのみ実行（学習済みモデルが必要）
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 python main.py --ticker 7203.T --mode backtest --initial_capital 1000000
 ```
 
@@ -85,26 +97,29 @@ python main.py --ticker 7203.T --mode backtest --initial_capital 1000000
 
 ```
 kaoru_private/
-├── ai_trading_agent.py        # AIエージェントシステム
-├── ai_agent_backtest.py       # AIエージェントバックテスト
-├── main.py                    # メインスクリプト
-├── requirements.txt           # 依存パッケージ
-├── README.md                 # このファイル
-├── data/                     # データと可視化結果
-│   ├── processed_data.csv
-│   ├── signals_visualization.png
-│   └── ai_agent_backtest_results.png
-├── models/                   # 学習済みモデル
-│   ├── *_focal_best.h5
-│   └── *_focal.h5
-└── src/                      # ソースコード
-    ├── data_fetcher.py           # データ取得
-    ├── feature_engineering.py    # 特徴量エンジニアリング
-    ├── model.py                  # モデル定義
-    ├── train.py                  # 学習
-    ├── backtest.py              # バックテスト・評価
-    ├── focal_loss.py            # Focal Loss実装
-    └── time_series_cv.py        # 時系列クロスバリデーション
+├── fx_trade/                  # AI Trading Agent System
+│   ├── ai_trading_agent.py        # AIエージェントシステム
+│   ├── ai_agent_backtest.py       # AIエージェントバックテスト
+│   ├── main.py                    # メインスクリプト
+│   ├── requirements.txt           # 依存パッケージ
+│   ├── README.md                 # このファイル
+│   ├── data/                     # データと可視化結果
+│   │   ├── processed_data.csv
+│   │   ├── signals_visualization.png
+│   │   └── ai_agent_backtest_results.png
+│   ├── models/                   # 学習済みモデル
+│   │   ├── *_focal_best.h5
+│   │   └── *_focal.h5
+│   └── src/                      # ソースコード
+│       ├── data_fetcher.py           # データ取得
+│       ├── feature_engineering.py    # 特徴量エンジニアリング
+│       ├── model.py                  # モデル定義
+│       ├── train.py                  # 学習
+│       ├── backtest.py              # バックテスト・評価
+│       ├── focal_loss.py            # Focal Loss実装
+│       └── time_series_cv.py        # 時系列クロスバリデーション
+├── *.ipynb                    # 他のMLプロジェクト
+└── *.py                       # 他のMLスクリプト
 ```
 
 ## 🔧 各モジュールの説明
@@ -150,6 +165,9 @@ LSTMベースの深層学習モデルを定義します。
 ### AIエージェントシステム
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 # AIエージェントの実行
 python ai_trading_agent.py
 python ai_agent_backtest.py
@@ -158,6 +176,9 @@ python ai_agent_backtest.py
 ### 従来システム
 
 ```bash
+# fx_tradeディレクトリに移動
+cd fx_trade
+
 # トヨタ自動車で学習とバックテスト
 python main.py --ticker 7203.T --mode all --epochs 50
 
